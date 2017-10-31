@@ -1,24 +1,27 @@
 <html>
-
   <head>
     <link rel="stylesheet" type="text/css" href="/css/style.css">
     <title>Login</title>
   </head>
-
   <body>
+<center>
+<div id='popup'>
 
-    <img src="/css/acdclogo.jpg" id="logo">
+    <img src="/css/greytHR.png" id="logo">
 
-    <form method='post' action='users/login'>
+    <form method='post' action='/users/login'>
 
-      <input type="text" placeholder="Username" autocomplete="off" name="username"></input>
+          <div class="" style="">{{message}}</div>         <!-- msg is the error message  -->
+
+      <img src='/css/user.png' style='height:5%; width:5%;'><input type="text" placeholder="Username" autocomplete="off" name="username"></input>
       <br>
-      <input type="password" placeholder="Password" autocomplete="off" name="password"></input> <!--type password makes password dots appear-->
+      <img src='/css/lock.png' style='height:5%; width:5%;'><input type="password" placeholder="Password" autocomplete="off" name="password"></input> <!--type password makes password dots appear-->
       <br>
       <button>Login</button>
 
     </form>
 
+</div>
+</center>
   </body>
-
 </html>

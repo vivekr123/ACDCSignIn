@@ -2,6 +2,18 @@ var express = require('express');
 var router = express.Router();
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
+var MongoClient = require('mongodb').MongoClient;
+var assert = require('assert');
+var ObjectId = require('mongodb').ObjectID;
+var url = 'mongodb://localhost/loginapp';
+
+
+var fs = require('fs');
+
+var mongoose = require('mongoose');
+db = mongoose.connection;
+
+var errMessage;
 
 var User = require('../model/user')
 
@@ -73,7 +85,8 @@ passport.use(new LocalStrategy(
 
     User.getUserByUsername(username, function(err, user){            //username in input field
       if(err) throw err;
-      if(!user){                                                     //if not user in db
+      if(!user){
+                                                            //if not user in db
         return done(null, false, {message: 'Unknown User'});
       }
 
@@ -82,6 +95,12 @@ passport.use(new LocalStrategy(
         if(isMatch){
           return done (null, user);
         } else {
+          console.log('Hi');
+          router.post('/login', function(req,res){
+            console.log('Hi 2');
+            res.render('login', {errMessage:'Hi there'});
+          });
+
           return done(null, false, {message: 'Invalid password'});
         }
       });
@@ -110,6 +129,30 @@ function(req, res){
 
     res.redirect('/');
 
+
 });
+
+router.get('/logout', function(req,res){
+
+  req.logout();                                                                    //logouts the user
+  req.flash('success_msg', 'You have successfully logged out');                    //message showing logout
+  res.redirect('/users/login');
+
+});
+
+
+          //add object containing all info into database under user's namespace
+
+function ensureAuthenticated(req,res,next){
+
+  if(req.isAuthenticated()){
+    return next();
+  }
+  else{
+    req.flash('error_msg', 'You are not logged in');
+    res.redirect('/users/login');
+  }
+
+}
 
 module.exports = router;
